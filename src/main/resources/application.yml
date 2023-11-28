@@ -1,0 +1,5 @@
+#locale
+spring:
+  mvc:
+    locale-resolver: fixed
+    locale: pt_BR
