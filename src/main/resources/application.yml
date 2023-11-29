@@ -14,3 +14,10 @@ spring:
         format_sql: false
     hibernate:
       ddl-auto: update
+
+springdoc:
+  swagger-ui:
+    path: /docs-park.html
+  api-docs:
+    path: /docs-park
+  packagesToScan: com.poc.parkapi.web.controller

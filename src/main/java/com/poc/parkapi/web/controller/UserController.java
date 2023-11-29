@@ -6,14 +6,23 @@ import com.poc.parkapi.web.dto.CreateUserDto;
 import com.poc.parkapi.web.dto.UpdateUserPasswordDto;
 import com.poc.parkapi.web.dto.UserResponseDto;
 import com.poc.parkapi.web.dto.mapper.UserMapper;
+import com.poc.parkapi.web.exception.ErrorMessage;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Users", description = "Contains all operation related to user")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/users")
@@ -21,6 +30,42 @@ public class UserController {
 
     private final UserService userService;
 
+    @Operation(
+            summary = "Create a new user",
+            description = "Resource to create a new user",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "User created with success",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = UserResponseDto.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "409",
+                            description = "User already registered",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = ErrorMessage.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "422",
+                            description = "Invalid field(s)",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = ErrorMessage.class
+                                    )
+                            )
+                    )
+            }
+    )
     @PostMapping
     public ResponseEntity<UserResponseDto> create(@RequestBody @Valid CreateUserDto createUserDto) {
         User response = userService.save(UserMapper.toUser(createUserDto));
@@ -28,6 +73,33 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toResponseDto(response));
     }
 
+
+    @Operation(
+            summary = "Find a user by ID",
+            description = "Resource to find a user by ID",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "User founded with success",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = UserResponseDto.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "User not founded",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = ErrorMessage.class
+                                    )
+                            )
+                    )
+            }
+    )
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(@PathVariable("id") Long userId) {
         User response = userService.findById(userId);
@@ -35,6 +107,24 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toResponseDto(response));
     }
 
+    @Operation(
+            summary = "Get all users",
+            description = "Resource to get all users",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Users listed with success",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    array = @ArraySchema(
+                                            schema = @Schema(
+                                                    implementation = UserResponseDto.class
+                                            )
+                                    )
+                            )
+                    )
+            }
+    )
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAll() {
         List<User> response = userService.findAll();
@@ -42,6 +132,52 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toResponseListDto(response));
     }
 
+    @Operation(
+            summary = "Update user password",
+            description = "Resource to update user password",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "204",
+                            description = "User password updated with success",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = Void.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "User not founded",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = ErrorMessage.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "User password not match",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = ErrorMessage.class
+                                    )
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "422",
+                            description = "Invalid field(s)",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(
+                                            implementation = ErrorMessage.class
+                                    )
+                            )
+                    )
+            }
+    )
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updatePassword(@PathVariable("id") Long userId, @RequestBody @Valid UpdateUserPasswordDto updateUserPasswordDto) {
         userService.updatePassword(userId, updateUserPasswordDto.getPassword(), updateUserPasswordDto.getNewPassword(), updateUserPasswordDto.getConfirmNewPassword());
