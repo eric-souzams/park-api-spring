@@ -39,9 +39,7 @@ public class UserController {
                             description = "User created with success",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = UserResponseDto.class
-                                    )
+                                    schema = @Schema(implementation = UserResponseDto.class)
                             )
                     ),
                     @ApiResponse(
@@ -49,9 +47,7 @@ public class UserController {
                             description = "User already registered",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ErrorMessage.class
-                                    )
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     ),
                     @ApiResponse(
@@ -59,9 +55,7 @@ public class UserController {
                             description = "Invalid field(s)",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ErrorMessage.class
-                                    )
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     )
             }
@@ -83,9 +77,7 @@ public class UserController {
                             description = "User founded with success",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = UserResponseDto.class
-                                    )
+                                    schema = @Schema(implementation = UserResponseDto.class)
                             )
                     ),
                     @ApiResponse(
@@ -93,9 +85,7 @@ public class UserController {
                             description = "User not founded",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ErrorMessage.class
-                                    )
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     )
             }
@@ -117,9 +107,7 @@ public class UserController {
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     array = @ArraySchema(
-                                            schema = @Schema(
-                                                    implementation = UserResponseDto.class
-                                            )
+                                            schema = @Schema(implementation = UserResponseDto.class)
                                     )
                             )
                     )
@@ -141,9 +129,7 @@ public class UserController {
                             description = "User password updated with success",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = Void.class
-                                    )
+                                    schema = @Schema(implementation = Void.class)
                             )
                     ),
                     @ApiResponse(
@@ -151,9 +137,7 @@ public class UserController {
                             description = "User not founded",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ErrorMessage.class
-                                    )
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     ),
                     @ApiResponse(
@@ -161,9 +145,7 @@ public class UserController {
                             description = "User password not match",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ErrorMessage.class
-                                    )
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     ),
                     @ApiResponse(
@@ -171,9 +153,7 @@ public class UserController {
                             description = "Invalid field(s)",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(
-                                            implementation = ErrorMessage.class
-                                    )
+                                    schema = @Schema(implementation = ErrorMessage.class)
                             )
                     )
             }

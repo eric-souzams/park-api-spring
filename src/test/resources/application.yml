@@ -1,0 +1,9 @@
+spring:
+  mvc:
+    locale-resolver: fixed
+    locale: pt_BR
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
