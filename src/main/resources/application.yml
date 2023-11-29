@@ -21,3 +21,5 @@ springdoc:
   api-docs:
     path: /docs-park
   packagesToScan: com.poc.parkapi.web.controller
+
+JWT_SECRET_KEY: gdfDH46d4FHG3gH$#GH6GFf65g4dy4t6hgf65h4
