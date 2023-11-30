@@ -1,5 +1,6 @@
 package com.poc.parkapi.web.controller;
 
+import com.poc.parkapi.jwt.JwtAuthentication;
 import com.poc.parkapi.web.dto.CreateUserDto;
 import com.poc.parkapi.web.dto.UpdateUserPasswordDto;
 import com.poc.parkapi.web.dto.UserResponseDto;
@@ -147,6 +148,7 @@ public class UserIT {
         UserResponseDto responseBody = client
                 .get()
                 .uri("/api/v1/users/100")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "maria@poc.dev", "123456"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(UserResponseDto.class)
@@ -158,13 +160,46 @@ public class UserIT {
         assertThat(responseBody.getUsername()).isEqualTo("maria@poc.dev");
         assertThat(responseBody.getId()).isEqualTo(100);
         assertThat(responseBody.getRole()).isEqualTo("ADMIN");
+
+        responseBody = client
+                .get()
+                .uri("/api/v1/users/200")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "joao@poc.dev", "123456"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(UserResponseDto.class)
+                .returnResult().getResponseBody();
+
+        assertThat(responseBody).isNotNull();
+        assertThat(responseBody.getId()).isNotNull();
+        assertThat(responseBody.getUsername()).isNotNull();
+        assertThat(responseBody.getUsername()).isEqualTo("joao@poc.dev");
+        assertThat(responseBody.getId()).isEqualTo(200);
+        assertThat(responseBody.getRole()).isEqualTo("CLIENT");
+
+        responseBody = client
+                .get()
+                .uri("/api/v1/users/200")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "maria@poc.dev", "123456"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(UserResponseDto.class)
+                .returnResult().getResponseBody();
+
+        assertThat(responseBody).isNotNull();
+        assertThat(responseBody.getId()).isNotNull();
+        assertThat(responseBody.getUsername()).isNotNull();
+        assertThat(responseBody.getUsername()).isEqualTo("joao@poc.dev");
+        assertThat(responseBody.getId()).isEqualTo(200);
+        assertThat(responseBody.getRole()).isEqualTo("CLIENT");
     }
 
     @Test
-    public void findUserByIdWithInvalidId() {
+    public void findUserByIdWithInvalidIdAndAdminRole() {
         ErrorMessage responseBody = client
                 .get()
                 .uri("/api/v1/users/101")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "maria@poc.dev", "123456"))
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody(ErrorMessage.class)
@@ -175,10 +210,26 @@ public class UserIT {
     }
 
     @Test
+    public void findUserByIdWithValidIdAndClientRole() {
+        ErrorMessage responseBody = client
+                .get()
+                .uri("/api/v1/users/100")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "joao@poc.dev", "123456"))
+                .exchange()
+                .expectStatus().isForbidden()
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        assertThat(responseBody).isNotNull();
+        assertThat(responseBody.getStatus()).isEqualTo(403);
+    }
+
+    @Test
     public void updateUserPasswordWithSuccessWithValidPasswords() {
         client
                 .patch()
                 .uri("/api/v1/users/100")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "maria@poc.dev", "123456"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UpdateUserPasswordDto("123456", "123457", "123457"))
                 .exchange()
@@ -189,16 +240,17 @@ public class UserIT {
     public void updateUserPasswordWithSuccessWithValidPasswordsAndInvalidUserId() {
         ErrorMessage responseBody = client
                 .patch()
-                .uri("/api/v1/users/101")
+                .uri("/api/v1/users/200")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "maria@poc.dev", "123456"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UpdateUserPasswordDto("123456", "123457", "123457"))
                 .exchange()
-                .expectStatus().isNotFound()
+                .expectStatus().isForbidden()
                 .expectBody(ErrorMessage.class)
                 .returnResult().getResponseBody();
 
         assertThat(responseBody).isNotNull();
-        assertThat(responseBody.getStatus()).isEqualTo(404);
+        assertThat(responseBody.getStatus()).isEqualTo(403);
     }
 
     @Test
@@ -206,6 +258,7 @@ public class UserIT {
         ErrorMessage responseBody = client
                 .patch()
                 .uri("/api/v1/users/100")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "maria@poc.dev", "123456"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UpdateUserPasswordDto("123456", "123457", "123456"))
                 .exchange()
@@ -219,6 +272,7 @@ public class UserIT {
         responseBody = client
                 .patch()
                 .uri("/api/v1/users/100")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "maria@poc.dev", "123456"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UpdateUserPasswordDto("123459", "123456", "123456"))
                 .exchange()
@@ -235,6 +289,7 @@ public class UserIT {
         ErrorMessage responseBody = client
                 .patch()
                 .uri("/api/v1/users/100")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "maria@poc.dev", "123456"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UpdateUserPasswordDto("123456", "12345", "12345"))
                 .exchange()
@@ -248,6 +303,7 @@ public class UserIT {
         responseBody = client
                 .patch()
                 .uri("/api/v1/users/100")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "maria@poc.dev", "123456"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UpdateUserPasswordDto("123456", "1234567", "1234567"))
                 .exchange()
@@ -261,6 +317,7 @@ public class UserIT {
         responseBody = client
                 .patch()
                 .uri("/api/v1/users/100")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "maria@poc.dev", "123456"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UpdateUserPasswordDto("", "", ""))
                 .exchange()
@@ -274,6 +331,7 @@ public class UserIT {
         responseBody = client
                 .patch()
                 .uri("/api/v1/users/100")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "maria@poc.dev", "123456"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UpdateUserPasswordDto("", "123456", "123456"))
                 .exchange()
@@ -290,6 +348,7 @@ public class UserIT {
         List<UserResponseDto> responseBody = client
                 .get()
                 .uri("/api/v1/users")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "maria@poc.dev", "123456"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBodyList(UserResponseDto.class)

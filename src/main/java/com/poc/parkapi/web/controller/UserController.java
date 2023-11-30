@@ -167,19 +167,7 @@ public class UserController {
             responses = {
                     @ApiResponse(
                             responseCode = "204",
-                            description = "User password updated with success",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Void.class)
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "User not founded",
-                            content = @Content(
-                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = ErrorMessage.class)
-                            )
+                            description = "User password updated with success"
                     ),
                     @ApiResponse(
                             responseCode = "400",
