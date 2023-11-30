@@ -23,7 +23,7 @@ public class JwtUtils {
     public static String SECRET_KEY = "gdfDH46d4FHG3gH$#GH6GFf65g4dy4t6hgf65h4";
     public static final long EXPIRE_DAYS = 0;
     public static final long EXPIRE_HOURS = 0;
-    public static final long EXPIRE_MINUTES = 2;
+    public static final long EXPIRE_MINUTES = 60;
 
     public JwtUtils() {
     }
@@ -59,7 +59,7 @@ public class JwtUtils {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(generateKey()).build()
-                    .parseClaimsJwt(refactorToken(token)).getBody();
+                    .parseClaimsJws(refactorToken(token)).getBody();
         } catch (JwtException ex) {
             log.error("Invalid token -> " + ex.getMessage());
         }
@@ -75,7 +75,7 @@ public class JwtUtils {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(generateKey()).build()
-                    .parseClaimsJwt(refactorToken(token));
+                    .parseClaimsJws(refactorToken(token));
             return true;
         } catch (JwtException ex) {
             log.error("Invalid token -> " + ex.getMessage());

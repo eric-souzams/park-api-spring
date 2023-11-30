@@ -12,12 +12,14 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -70,6 +72,7 @@ public class UserController {
 
     @Operation(
             summary = "Find a user by ID",
+            security = @SecurityRequirement(name = "security"),
             description = "Resource to find a user by ID",
             responses = {
                     @ApiResponse(
@@ -87,19 +90,38 @@ public class UserController {
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ErrorMessage.class)
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "User without permission",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+                    ,
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "User unauthorized",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Void.class)
+                            )
                     )
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> getUserById(@PathVariable("id") Long userId) {
-        User response = userService.findById(userId);
+    @PreAuthorize("hasRole('ADMIN') OR (hasRole('CLIENT') AND #id == authentication.principal.id)")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable("id") Long id) {
+        User response = userService.findById(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toResponseDto(response));
     }
 
     @Operation(
             summary = "Get all users",
-            description = "Resource to get all users",
+            security = @SecurityRequirement(name = "security"),
+            description = "Resource to get all users. Only to ADMIN",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -110,10 +132,28 @@ public class UserController {
                                             schema = @Schema(implementation = UserResponseDto.class)
                                     )
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "User without permission",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+                    ,
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "User unauthorized",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Void.class)
+                            )
                     )
             }
     )
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDto>> getAll() {
         List<User> response = userService.findAll();
 
@@ -122,6 +162,7 @@ public class UserController {
 
     @Operation(
             summary = "Update user password",
+            security = @SecurityRequirement(name = "security"),
             description = "Resource to update user password",
             responses = {
                     @ApiResponse(
@@ -155,12 +196,30 @@ public class UserController {
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ErrorMessage.class)
                             )
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "User without permission",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorMessage.class)
+                            )
+                    )
+                    ,
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "User unauthorized",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Void.class)
+                            )
                     )
             }
     )
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updatePassword(@PathVariable("id") Long userId, @RequestBody @Valid UpdateUserPasswordDto updateUserPasswordDto) {
-        userService.updatePassword(userId, updateUserPasswordDto.getPassword(), updateUserPasswordDto.getNewPassword(), updateUserPasswordDto.getConfirmNewPassword());
+    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT') AND (#id == authentication.principal.id)")
+    public ResponseEntity<Void> updatePassword(@PathVariable("id") Long id, @RequestBody @Valid UpdateUserPasswordDto updateUserPasswordDto) {
+        userService.updatePassword(id, updateUserPasswordDto.getPassword(), updateUserPasswordDto.getNewPassword(), updateUserPasswordDto.getConfirmNewPassword());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

@@ -10,6 +10,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
+
 @Slf4j
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -19,16 +21,27 @@ public class ApiExceptionHandler {
                                                                         HttpServletRequest request,
                                                                         BindingResult result) {
         log.error("API Error -> ", ex);
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+        return ResponseEntity
+                .status(HttpStatus.UNPROCESSABLE_ENTITY)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.UNPROCESSABLE_ENTITY, "Invalid field(s)", result));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorMessage> accessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
+        log.error("API Error -> ", ex);
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(request, HttpStatus.FORBIDDEN, ex.getMessage()));
     }
 
     @ExceptionHandler(UsernameUniqueViolationException.class)
     public ResponseEntity<ErrorMessage> usernameUniqueViolationException(UsernameUniqueViolationException ex,
                                                                         HttpServletRequest request) {
         log.error("API Error -> ", ex);
-        return ResponseEntity.status(HttpStatus.CONFLICT)
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.CONFLICT, ex.getMessage()));
     }
@@ -36,7 +49,8 @@ public class ApiExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorMessage> userNotFoundException(UserNotFoundException ex, HttpServletRequest request) {
         log.error("API Error -> ", ex);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.NOT_FOUND, ex.getMessage()));
     }
@@ -44,7 +58,8 @@ public class ApiExceptionHandler {
     @ExceptionHandler(InvalidPasswordException.class)
     public ResponseEntity<ErrorMessage> invalidPasswordException(InvalidPasswordException ex, HttpServletRequest request) {
         log.error("API Error -> ", ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ErrorMessage(request, HttpStatus.BAD_REQUEST, ex.getMessage()));
     }

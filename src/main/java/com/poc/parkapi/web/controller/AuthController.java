@@ -4,6 +4,7 @@ import com.poc.parkapi.jwt.JwtToken;
 import com.poc.parkapi.jwt.JwtUserDetailsService;
 import com.poc.parkapi.web.dto.UserLoginDto;
 import com.poc.parkapi.web.exception.ErrorMessage;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Auth", description = "Contains all operation related to auth")
 @Slf4j
 @RequiredArgsConstructor
 @RestController

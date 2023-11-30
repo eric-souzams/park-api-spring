@@ -1,5 +1,6 @@
 package com.poc.parkapi.config;
 
+import com.poc.parkapi.jwt.JwtAuthenticationEntryPoint;
 import com.poc.parkapi.jwt.JwtAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
+import java.util.Arrays;
+
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.*;
 
 @EnableMethodSecurity
 @EnableWebMvc
@@ -32,11 +36,26 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 antMatcher(HttpMethod.POST, "/api/v1/users"),
-                                antMatcher(HttpMethod.POST, "/api/v1/auth/*")
+                                antMatcher(HttpMethod.POST, "/api/v1/auth/login")
+                        ).permitAll()
+                        .requestMatchers(
+                                antMatcher("/docs/index.html"),
+                                antMatcher("/docs-park.html"),
+                                antMatcher("/docs-park/**"),
+                                antMatcher("/v3/api-docs/**"),
+                                antMatcher("/swagger-ui-custom.html"),
+                                antMatcher("/swagger-ui.html"),
+                                antMatcher("/swagger-ui/index.html"),
+                                antMatcher("/swagger-ui/**"),
+                                antMatcher("/**.html"),
+                                antMatcher("/webjars/**"),
+                                antMatcher("/configuration/**"),
+                                antMatcher("/swagger-resources/**")
                         ).permitAll()
                         .anyRequest().authenticated()
                 ).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(new JwtAuthenticationEntryPoint()))
                 .build();
     }
 
