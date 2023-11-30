@@ -358,4 +358,18 @@ public class UserIT {
         assertThat(responseBody.size()).isEqualTo(5);
     }
 
+    @Test
+    public void getAllUserRegisteredWithClientRole() {
+        ErrorMessage responseBody = client
+                .get()
+                .uri("/api/v1/users")
+                .headers(JwtAuthentication.getHeaderAuthorization(client, "joao@poc.dev", "123456"))
+                .exchange()
+                .expectStatus().isForbidden()
+                .expectBody(ErrorMessage.class)
+                .returnResult().getResponseBody();
+
+        assertThat(responseBody).isNotNull();
+        assertThat(responseBody.getStatus()).isEqualTo(403);
+    }
 }
