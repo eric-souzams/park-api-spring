@@ -1,16 +1,12 @@
-package com.poc.parkapi.web.dto;
+package com.poc.parkapi.web.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-public class UserLoginDto {
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @ToString
+public class CreateUserDto {
 
     @NotBlank
     @Email(message = "Invalid e-mail", regexp = "^[a-z0-9.+-]+@[a-z0-9.-]+\\.[a-z]{2,}$")

@@ -1,4 +1,4 @@
-package com.poc.parkapi.web.dto;
+package com.poc.parkapi.web.dto.user;
 
 import lombok.*;
 

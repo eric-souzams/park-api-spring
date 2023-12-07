@@ -1,9 +1,8 @@
 package com.poc.parkapi.web.dto.mapper;
 
 import com.poc.parkapi.entity.User;
-import com.poc.parkapi.enums.Role;
-import com.poc.parkapi.web.dto.CreateUserDto;
-import com.poc.parkapi.web.dto.UserResponseDto;
+import com.poc.parkapi.web.dto.user.CreateUserDto;
+import com.poc.parkapi.web.dto.user.UserResponseDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 

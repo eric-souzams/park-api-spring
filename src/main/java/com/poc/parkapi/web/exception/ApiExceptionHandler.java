@@ -36,9 +36,8 @@ public class ApiExceptionHandler {
                 .body(new ErrorMessage(request, HttpStatus.FORBIDDEN, ex.getMessage()));
     }
 
-    @ExceptionHandler(UsernameUniqueViolationException.class)
-    public ResponseEntity<ErrorMessage> usernameUniqueViolationException(UsernameUniqueViolationException ex,
-                                                                        HttpServletRequest request) {
+    @ExceptionHandler({UsernameUniqueViolationException.class, CpfUniqueViolationException.class})
+    public ResponseEntity<ErrorMessage> uniqueViolationException(RuntimeException ex, HttpServletRequest request) {
         log.error("API Error -> ", ex);
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)

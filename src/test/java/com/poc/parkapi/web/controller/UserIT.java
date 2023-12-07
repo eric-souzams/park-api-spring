@@ -1,9 +1,9 @@
 package com.poc.parkapi.web.controller;
 
 import com.poc.parkapi.jwt.JwtAuthentication;
-import com.poc.parkapi.web.dto.CreateUserDto;
-import com.poc.parkapi.web.dto.UpdateUserPasswordDto;
-import com.poc.parkapi.web.dto.UserResponseDto;
+import com.poc.parkapi.web.dto.user.CreateUserDto;
+import com.poc.parkapi.web.dto.user.UpdateUserPasswordDto;
+import com.poc.parkapi.web.dto.user.UserResponseDto;
 import com.poc.parkapi.web.exception.ErrorMessage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

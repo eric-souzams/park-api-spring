@@ -1,6 +1,6 @@
 package com.poc.parkapi.jwt;
 
-import com.poc.parkapi.web.dto.UserLoginDto;
+import com.poc.parkapi.web.dto.user.UserLoginDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.reactive.server.WebTestClient;
 

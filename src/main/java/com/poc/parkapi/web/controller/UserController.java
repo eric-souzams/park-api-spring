@@ -2,9 +2,9 @@ package com.poc.parkapi.web.controller;
 
 import com.poc.parkapi.entity.User;
 import com.poc.parkapi.service.UserService;
-import com.poc.parkapi.web.dto.CreateUserDto;
-import com.poc.parkapi.web.dto.UpdateUserPasswordDto;
-import com.poc.parkapi.web.dto.UserResponseDto;
+import com.poc.parkapi.web.dto.user.CreateUserDto;
+import com.poc.parkapi.web.dto.user.UpdateUserPasswordDto;
+import com.poc.parkapi.web.dto.user.UserResponseDto;
 import com.poc.parkapi.web.dto.mapper.UserMapper;
 import com.poc.parkapi.web.exception.ErrorMessage;
 import io.swagger.v3.oas.annotations.Operation;

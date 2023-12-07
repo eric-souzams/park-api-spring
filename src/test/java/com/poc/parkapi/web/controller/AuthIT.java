@@ -1,7 +1,7 @@
 package com.poc.parkapi.web.controller;
 
 import com.poc.parkapi.jwt.JwtToken;
-import com.poc.parkapi.web.dto.UserLoginDto;
+import com.poc.parkapi.web.dto.user.UserLoginDto;
 import com.poc.parkapi.web.exception.ErrorMessage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
