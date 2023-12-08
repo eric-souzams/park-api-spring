@@ -1,5 +1,6 @@
 package com.poc.parkapi.web.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class ApiExceptionHandler {
                 .body(new ErrorMessage(request, HttpStatus.FORBIDDEN, ex.getMessage()));
     }
 
-    @ExceptionHandler({UsernameUniqueViolationException.class, CpfUniqueViolationException.class})
+    @ExceptionHandler({UsernameUniqueViolationException.class, CpfUniqueViolationException.class, CodeUniqueViolationException.class})
     public ResponseEntity<ErrorMessage> uniqueViolationException(RuntimeException ex, HttpServletRequest request) {
         log.error("API Error -> ", ex);
         return ResponseEntity
@@ -45,8 +46,8 @@ public class ApiExceptionHandler {
                 .body(new ErrorMessage(request, HttpStatus.CONFLICT, ex.getMessage()));
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorMessage> userNotFoundException(UserNotFoundException ex, HttpServletRequest request) {
+    @ExceptionHandler({UserNotFoundException.class, EntityNotFoundException.class})
+    public ResponseEntity<ErrorMessage> userNotFoundException(RuntimeException ex, HttpServletRequest request) {
         log.error("API Error -> ", ex);
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)

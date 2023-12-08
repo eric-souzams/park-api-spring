@@ -1,0 +1,168 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > UserMapper</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.poc.parkapi.web.dto.mapper</a>
+</div>
+
+<h1>Coverage Summary for Class: UserMapper (com.poc.parkapi.web.dto.mapper)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserMapper</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87,5%
+  </span>
+  <span class="absValue">
+    (7/8)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">UserMapper$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    83,3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90%
+  </span>
+  <span class="absValue">
+    (9/10)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.poc.parkapi.web.dto.mapper;
+&nbsp;
+&nbsp;import com.poc.parkapi.entity.User;
+&nbsp;import com.poc.parkapi.web.dto.user.CreateUserDto;
+&nbsp;import com.poc.parkapi.web.dto.user.UserResponseDto;
+&nbsp;import org.modelmapper.ModelMapper;
+&nbsp;import org.modelmapper.PropertyMap;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+<b class="nc">&nbsp;public class UserMapper {</b>
+&nbsp;
+&nbsp;    public static User toUser(CreateUserDto createUserDto) {
+<b class="fc">&nbsp;        return new ModelMapper().map(createUserDto, User.class);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static UserResponseDto toResponseDto(User user) {
+<b class="fc">&nbsp;        String role = user.getRole().name().substring(&quot;ROLE_&quot;.length());</b>
+&nbsp;
+<b class="fc">&nbsp;        PropertyMap&lt;User, UserResponseDto&gt; props = new PropertyMap&lt;User, UserResponseDto&gt;() {</b>
+&nbsp;            @Override
+&nbsp;            protected void configure() {
+<b class="fc">&nbsp;                map().setRole(role);</b>
+&nbsp;            }
+&nbsp;        };
+&nbsp;
+<b class="fc">&nbsp;        ModelMapper mapper = new ModelMapper();</b>
+<b class="fc">&nbsp;        mapper.addMappings(props);</b>
+&nbsp;
+<b class="fc">&nbsp;        return mapper.map(user, UserResponseDto.class);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static List&lt;UserResponseDto&gt; toResponseListDto(List&lt;User&gt; users) {
+<b class="fc">&nbsp;        return users.stream().map(UserMapper::toResponseDto).collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-06 23:29</div>
+</div>
+</body>
+</html>
