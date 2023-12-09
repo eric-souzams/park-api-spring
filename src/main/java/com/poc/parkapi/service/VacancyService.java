@@ -9,6 +9,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.poc.parkapi.enums.StatusVacancy.FREE;
+
 @RequiredArgsConstructor
 @Service
 public class VacancyService {
@@ -30,4 +32,9 @@ public class VacancyService {
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Vacancy with code=%s not founded", code)));
     }
 
+    @Transactional(readOnly = true)
+    public Vacancy findByFreeVacancy() {
+        return vacancyRepository.findFirstByStatus(FREE)
+                .orElseThrow(() -> new EntityNotFoundException("No free vacancies were found."));
+    }
 }

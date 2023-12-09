@@ -1,9 +1,7 @@
 package com.poc.parkapi.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -11,31 +9,58 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "clients")
+@Table(name = "clients_have_vacancies")
 @EntityListeners(AuditingEntityListener.class)
-public class Client implements Serializable {
+public class ClientVacancy implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 100)
-    private String name;
+    @Column(name = "receipt_number", nullable = false, unique = true, length = 15)
+    private String receipt;
 
-    @Column(name = "cpf", nullable = false, unique = true, length = 11)
-    private String cpf;
+    @Column(name = "plate", nullable = false, length = 8)
+    private String plate;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "brand", nullable = false, length = 45)
+    private String brand;
+
+    @Column(name = "model", nullable = false, length = 45)
+    private String model;
+
+    @Column(name = "color", nullable = false, length = 45)
+    private String color;
+
+    @Column(name = "entry_date", nullable = false)
+    private LocalDateTime entryDate;
+
+    @Column(name = "departure_date")
+    private LocalDateTime departureDate;
+
+    @Column(name = "amount", columnDefinition = "decimal(7,2)")
+    private BigDecimal amount;
+
+    @Column(name = "discount", columnDefinition = "decimal(7,2)")
+    private BigDecimal discount;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+
+    @ManyToOne
+    @JoinColumn(name = "vacancy_id", nullable = false)
+    private Vacancy vacancy;
 
     @CreatedDate
     @Column(name = "creation_date")
@@ -57,8 +82,8 @@ public class Client implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Client client = (Client) o;
-        return Objects.equals(id, client.id);
+        ClientVacancy that = (ClientVacancy) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
@@ -66,10 +91,4 @@ public class Client implements Serializable {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "Client{" +
-                "id=" + id +
-                '}';
-    }
 }
