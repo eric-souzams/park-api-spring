@@ -13,6 +13,10 @@ This project was developed using the following technologies:
 - [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
 - [Lombok](https://projectlombok.org/)
 - [MYSQL](https://www.mysql.com/)
+- [H2 Database]()
+- [JWT]()
+- [SpringDoc - Swagger]()
+- [ModelMapper]()
 
 ## Preview
 ```
