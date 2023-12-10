@@ -17,11 +17,13 @@ This project was developed using the following technologies:
 - [JWT]()
 - [SpringDoc - Swagger]()
 - [ModelMapper]()
+- [Tests End-2-End / Integration]()
 
 ## Preview
 ```
 v1.0.0
 ```
+<img src="./public/screen_1.png">
 
 ## Building
 You'll need [Java 17+](https://www.oracle.com/br/java/technologies/javase-jdk17-downloads.html) and [Maven](https://maven.apache.org/download.cgi) installed on your computer in order to build this app.
